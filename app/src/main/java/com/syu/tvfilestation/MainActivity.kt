@@ -118,7 +118,6 @@ class MainActivity : Activity() {
         val intents = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             listOf(
                 Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION),
-                Intent(Settings.ACTION_MANAGE_STORAGE),
                 Intent(
                     Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                     Uri.fromParts("package", packageName, null)

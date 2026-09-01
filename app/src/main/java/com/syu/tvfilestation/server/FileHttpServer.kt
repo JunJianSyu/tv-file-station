@@ -3,6 +3,7 @@ package com.syu.tvfilestation.server
 import android.content.Context
 import android.os.Environment
 import fi.iki.elonen.NanoHTTPD
+import fi.iki.elonen.NanoHTTPD.Response.Status
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -64,7 +65,8 @@ class FileHttpServer(
             return jsonError("配对码错误", Status.FORBIDDEN)
         }
         val resp = jsonResponse(JSONObject().put("ok", true).toString())
-        resp.addCookieHeader(auth.cookieValue())
+        // NanoHTTPD 2.3.1 无 addCookieHeader，直接写 Set-Cookie 头
+        resp.addHeader("Set-Cookie", auth.cookieValue())
         return resp
     }
 
@@ -114,7 +116,7 @@ class FileHttpServer(
         val body = JSONObject(readPostBody(session) ?: "")
         val target = resolveSafe(body.optString("path"))
             ?: return jsonError("非法路径", Status.FORBIDDEN)
-        if (target.exists()) return jsonError("目录已存在", Status.CONFLICT)
+        if (target.exists()) return jsonError("目录已存在", Status.BAD_REQUEST)
         if (!target.mkdirs()) return jsonError("创建失败", Status.INTERNAL_ERROR)
         return jsonResponse(JSONObject().put("ok", true).toString())
     }
@@ -129,7 +131,7 @@ class FileHttpServer(
         }
         if (!src.exists()) return jsonError("目标不存在", Status.NOT_FOUND)
         val dest = File(src.parentFile, newName)
-        if (dest.exists()) return jsonError("同名文件已存在", Status.CONFLICT)
+        if (dest.exists()) return jsonError("同名文件已存在", Status.BAD_REQUEST)
         if (!src.renameTo(dest)) return jsonError("重命名失败", Status.INTERNAL_ERROR)
         return jsonResponse(JSONObject().put("ok", true).toString())
     }
