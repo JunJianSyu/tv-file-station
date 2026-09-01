@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="48dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textColor="#FFFFFFFF"
+        android:textSize="34sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/service_stopped"
+        android:textColor="#FF9E9E9E"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvUrl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="monospace"
+        android:text="--"
+        android:textColor="#FF4FC3F7"
+        android:textSize="48sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="配对码："
+            android:textColor="#FFBDBDBD"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/tvCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:letterSpacing="0.4"
+            android:text="------"
+            android:textColor="#FFFFD54F"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnToggle"
+        android:layout_width="320dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="40dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:text="开启服务"
+        android:textSize="22sp" />
+
+    <LinearLayout
+        android:id="@+id/layoutPermission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⚠ 尚未授予「所有文件访问」权限，无法管理文件"
+            android:textColor="#FFFF8A65"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btnGrantPermission"
+            android:layout_width="320dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
+            android:focusable="true"
+            android:text="去授权"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="在电脑浏览器输入上方地址，输入配对码后即可管理文件"
+        android:textColor="#FF757575"
+        android:textSize="16sp" />
+
+</LinearLayout>

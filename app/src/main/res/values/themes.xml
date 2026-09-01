@@ -1,0 +1,9 @@
+<resources>
+    <!-- TV 深色主题，无标题栏 -->
+    <style name="AppTheme" parent="@android:style/Theme.Material.NoTitleBar">
+        <item name="android:colorPrimary">#1565C0</item>
+        <item name="android:colorPrimaryDark">#0D47A1</item>
+        <item name="android:colorAccent">#4FC3F7</item>
+        <item name="android:windowBackground">#FF101418</item>
+    </style>
+</resources>
