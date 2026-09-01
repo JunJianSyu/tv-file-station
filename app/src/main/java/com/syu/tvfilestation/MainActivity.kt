@@ -65,7 +65,7 @@ class MainActivity : Activity() {
         btnGrantPermission = findViewById(R.id.btnGrantPermission)
 
         btnToggle.setOnClickListener { onToggleClicked() }
-        btnGrantPermission.setOnClickListener { openStoragePermissionSettings() }
+        btnGrantPermission.setOnClickListener { requestStoragePermission() }
 
         bindService(Intent(this, FileServerService::class.java), connection, BIND_AUTO_CREATE)
         requestNotificationPermissionIfNeeded()
@@ -91,8 +91,7 @@ class MainActivity : Activity() {
     private fun onToggleClicked() {
         val svc = service ?: return
         if (!hasStoragePermission()) {
-            Toast.makeText(this, "请先授予「所有文件访问」权限", Toast.LENGTH_LONG).show()
-            openStoragePermissionSettings()
+            requestStoragePermission()
             return
         }
         if (svc.isRunning) {
@@ -110,6 +109,41 @@ class MainActivity : Activity() {
             if (!ok) {
                 Toast.makeText(this, "服务启动失败（端口可能被占用）", Toast.LENGTH_LONG).show()
             }
+            refreshUi()
+        }
+    }
+
+    /**
+     * 按系统版本申请存储权限：
+     * - Android 10 及以下：WRITE_EXTERNAL_STORAGE 运行时弹窗
+     * - Android 11+：跳转「所有文件访问」设置页
+     */
+    private fun requestStoragePermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    REQ_STORAGE
+                )
+            }
+        } else {
+            openStoragePermissionSettings()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQ_STORAGE) {
+            val granted = grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED
+            Toast.makeText(
+                this,
+                if (granted) "存储权限已授予" else "未授予存储权限，无法传输文件",
+                Toast.LENGTH_LONG
+            ).show()
             refreshUi()
         }
     }
@@ -169,11 +203,14 @@ class MainActivity : Activity() {
         }
     }
 
-    private fun hasStoragePermission(): Boolean =
-        Build.VERSION.SDK_INT < Build.VERSION_CODES.R || Environment.isExternalStorageManager()
+    private fun hasStoragePermission(): Boolean = when {
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> Environment.isExternalStorageManager()
+        else -> checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+    }
 
     companion object {
         private const val REFRESH_INTERVAL_MS = 2000L
         private const val REQ_NOTIFICATION = 100
+        private const val REQ_STORAGE = 101
     }
 }
