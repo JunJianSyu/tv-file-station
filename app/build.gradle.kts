@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.junjian.tvfilestation"
+    namespace = "com.syu.tvfilestation"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.junjian.tvfilestation"
+        applicationId = "com.syu.tvfilestation"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
