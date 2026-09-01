@@ -66,7 +66,20 @@ gradle wrapper --gradle-version 8.7   # 首次生成 wrapper
    ```
 4. **无 U 盘时**：可用「小米电视助手」手机 App 推送安装
 5. **授权页缺失**：MIUI TV 可能没有「所有文件访问」设置页，App 会自动降级跳转到应用详情页，
-   在其中寻找存储/权限相关开关
+   在其中寻找存储/权限相关开关；若仍无法授权（Android 11+ 电视常见），用 ADB 直接授权：
+   ```bash
+   adb connect <电视IP>
+   adb shell appops set com.syu.tvfilestation MANAGE_EXTERNAL_STORAGE allow
+   ```
+
+## 存储权限说明
+
+创建目录/上传文件需要存储写入权限，按系统版本自动适配：
+
+| TV 系统 | 权限 | 授予方式 |
+|---|---|---|
+| Android 7–10 | WRITE_EXTERNAL_STORAGE | 首次开启服务时自动弹窗，遥控器确认即可 |
+| Android 11+ | MANAGE_EXTERNAL_STORAGE | 跳转设置页手动开启；无设置页时用上方 ADB 命令 |
 
 ## 已知限制（v1 明确不做）
 
